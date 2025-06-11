@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:stellar_pi/model/group.dart';
 
+import 'dancers_screen.dart';
+
 class GroupsScreen extends StatefulWidget {
   const GroupsScreen({Key? key}) : super(key: key);
 
@@ -154,8 +156,17 @@ class _GroupsScreenState extends State<GroupsScreen> {
               ),
               title: Text(group.name),
               onTap: () {
-                // tutaj można np. przejść do listy tancerek w danej grupie
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DancersScreen(
+                      groupId: group.id,
+                      groupName: group.name,
+                    ),
+                  ),
+                );
               },
+
             );
           },
         ),

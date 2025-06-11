@@ -11,20 +11,26 @@ import 'login_screen.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  void _logout(BuildContext context) async {
+  Future<void> _logout(BuildContext context) async {
     final supabase = context.read<SupabaseService>();
-    await supabase.signOut();
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
-          (route) => false,
-    );
+    try {
+      await supabase.signOut();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+            (route) => false,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Błąd podczas wylogowania: $e')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color tileColor = Theme.of(context).colorScheme.primary.withOpacity(0.15);
-    final Color iconColor = Theme.of(context).colorScheme.primary;
+    final tileColor = Theme.of(context).colorScheme.primary.withOpacity(0.15);
+    final iconColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(
@@ -50,8 +56,9 @@ class HomeScreen extends StatelessWidget {
               label: 'Grupy',
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const GroupsScreen()));
+                  context,
+                  MaterialPageRoute(builder: (_) => const GroupsScreen()),
+                );
               },
               backgroundColor: tileColor,
               iconColor: iconColor,
@@ -62,8 +69,9 @@ class HomeScreen extends StatelessWidget {
               label: 'Kalendarz',
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const CalendarScreen()));
+                  context,
+                  MaterialPageRoute(builder: (_) => const CalendarScreen()),
+                );
               },
               backgroundColor: tileColor,
               iconColor: iconColor,
@@ -74,7 +82,9 @@ class HomeScreen extends StatelessWidget {
               label: 'Trening',
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => VideosScreen()));
+                  context,
+                  MaterialPageRoute(builder: (_) =>  VideosScreen()),
+                );
               },
               backgroundColor: tileColor,
               iconColor: iconColor,
@@ -85,7 +95,9 @@ class HomeScreen extends StatelessWidget {
               label: 'Info',
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => InfoScreen()));
+                  context,
+                  MaterialPageRoute(builder: (_) =>  InfoScreen()),
+                );
               },
               backgroundColor: tileColor,
               iconColor: iconColor,
@@ -118,8 +130,9 @@ class HomeScreen extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 48, // mniejsza ikona
+              size: 48,
               color: iconColor,
+              semanticLabel: label,
             ),
             const SizedBox(height: 12),
             Text(
